@@ -23,7 +23,7 @@ const forgetPassword = async (req, res) => {
         if (existingUser) {
             const resetToken = jwt.sign({ Email }, jwtKey, { expiresIn: '1h' });
 
-            const resetLink = `https://jumji.netlify.app/reset-password/${resetToken}`;
+            const resetLink = `https://jumjiapp.netlify.app/reset-password/${resetToken}`;
             sendEmail(Email, 'Password Reset', `Click the following link to reset your password: ${resetLink}`);
 
             res.json({ message: 'Password reset link sent to your email.' });
