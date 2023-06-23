@@ -1,37 +1,30 @@
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 const user = require("../model/RegistrationModel");
+let baseURL = process.env.BaseURL
 
-const jwtKey = "your_jwt_secret_key";
 
-// Gmail API credentials
-const CLIENT_ID = '484840864874-5oq8b050bh2q33qf04tc3435godt249m.apps.googleusercontent.com';
-const CLIENT_SECRET = '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';
-//const REDIRECT_URI = 'https://accounts.google.com/o/oauth2/auth';
-const REFRESH_TOKEN = 'https://oauth2.googleapis.com/token';
 
+const jwtKey = "jwtkey";
 const transporter = nodemailer.createTransport({
-
-    service: 'gmail',
+    service: 'Gmail',
     auth: {
-        type: 'OAuth2',
-        user: 'rajputpawan824@gmail.com',
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-        refreshToken: REFRESH_TOKEN
-    }
+        user: 'pawanrajput852710@gmail.com',
+        pass: 'mxdhlkeuukecdlxd',
+    },
 });
 
 const forgetPassword = async (req, res) => {
     try {
-        const { email } = req.body;
-        const existingUser = await user.findOne({ email });
+        const { Email } = req.body;
+        console.log(Email)
+        const existingUser = await user.findOne({ Email });
 
         if (existingUser) {
-            const resetToken = jwt.sign({ email }, jwtKey, { expiresIn: '1h' });
+            const resetToken = jwt.sign({ Email }, jwtKey, { expiresIn: '1h' });
 
-            const resetLink = `http://localhost:3000/reset-password/${resetToken}`;
-            sendEmail(email, 'Password Reset', `Click the following link to reset your password: ${resetLink}`);
+            const resetLink = `https://jumji.vercel.app/reset-password/${resetToken}`;
+            sendEmail(Email, 'Password Reset', `Click the following link to reset your password: ${resetLink}`);
 
             res.json({ message: 'Password reset link sent to your email.' });
         } else {
@@ -45,39 +38,45 @@ const forgetPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
     try {
+        
         const { token } = req.params;
-        const { newPassword } = req.body;
+        const { Password } = req.body;
+        console.log(token)
+        
+        if(Password === undefined || Password.length === 0){
+            return  res.status(400).json({ message: "password is required" });
+        }
 
-
+         
         const decoded = jwt.verify(token, jwtKey);
-        const email = decoded.email;
-        // Update the user's password in the database or your preferred storage mechanism
-        // Example: user.updateOne({ email }, { password: newPassword });
+        console.log(decoded)
+        const Email = decoded.Email;
+       
 
-        await user.updateOne({ email }, { password: newPassword });
+        await user.findOneAndUpdate({ Email :Email}, {$set:{ Password: Password }},{returnOriginal: false});
 
-        return res.status(200).json({ message: 'Password reset successful.' });
+       return  res.status(200).json({ message: 'Password reset successful.' });
     } catch (err) {
         console.log(err.message)
-        return res.status(500).json({ error: 'Invalid or expired reset token.' });
+       return res.status(500).json({ error: 'Invalid or expired reset token.' });
     }
 };
 
-function sendEmail(email, subject, message) {
+function sendEmail(Email, subject, message) {
     const mailOptions = {
         from: 'pawanrajput852710@gmail.com',
-        to: email,
+        to: Email,
         subject: subject,
         text: message,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.log(error);
+            console.log(error.message);
         } else {
             console.log('Email sent: ' + info.response);
         }
     });
 }
 
-module.exports = { forgetPassword, resetPassword }
+module.exports = {forgetPassword,resetPassword}
