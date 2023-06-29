@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 const user = require("../model/RegistrationModel");
-let baseURL = process.env.BaseURL
+
 
 
 

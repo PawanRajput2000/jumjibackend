@@ -8,7 +8,7 @@ require('dotenv').config()
 
 app.use(cors())
 
-mongoose.connect("mongodb+srv://kakarot:7r9d5ckARYXY2cDi@cluster0.ecdqowc.mongodb.net/group47database?retryWrites=true&w=majority", { useNewUrlParser: true })
+mongoose.connect("mongodb+srv://functionup-cohert:yCRgEggIFfjlaB8o@sl0yd7n.mongodb.net/?retryWrites=true&w=majority", { useNewUrlParser: true })
     .then(() => {
         console.log("mongodb connected")
     }).catch(err => {
