@@ -1,5 +1,6 @@
 const order = require("../model/orderSchema")
 const item = require("../model/itemmodel")
+const dashboard = require("../model/schemaModel")
 
 
 
@@ -34,6 +35,7 @@ const saveitem = async(req,res)=>{
 
 const getitems = async(req,res)=>{
     try {
+        console.log("hello")
       let data = await item.find()
       res.json({status:true , data : data})
 
@@ -43,4 +45,30 @@ const getitems = async(req,res)=>{
     }
 }
 
-module.exports = {saveorder,saveitem,getitems}
+
+
+const Dashboard  =async (req,res)=>{
+    try {
+        const body = req.body 
+        let data = await dashboard.create(body)
+        res.json({status:true , data : data})
+    }catch(err){
+      console.log(err.message)
+    }
+}
+
+
+const getdashboard= async(req,res)=>{
+   try {
+        const data = await dashboard.find()
+    res.json({status:true , data : data})
+
+
+}catch(err){
+    console.log(err.message)
+}
+
+} 
+
+
+module.exports = {saveorder,saveitem,getitems,Dashboard,getdashboard}
