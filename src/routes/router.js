@@ -3,7 +3,7 @@ const router = express.Router()
 
 const register  =  require('../controller/registrationController')
 const {forgetPassword,resetPassword} = require("../controller/otpGenerator")
-const {getdashboard, getProduct, getPurchase} = require("../controller/getApi")
+const {getdashboard, getProduct, getPurchase, getDetailsUsingDate} = require("../controller/getApi")
 
 const {createSupplier,createProduct, createpurchase} = require('../controller/PostApi/postapi')
 
@@ -26,5 +26,9 @@ router.post('/forgetPassword', forgetPassword)
 
  router.post('/createpurchase', createpurchase)
  router.get('/getpurchase', getPurchase)
+
+
+ router.get('/detailsinrange',getDetailsUsingDate)
+ 
 
 module.exports = router

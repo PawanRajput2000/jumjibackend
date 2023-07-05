@@ -3,10 +3,7 @@ const mongoose = require("mongoose")
 
 const purchase = new mongoose.Schema({
 
-    order_id: {
-        type: Number,
-        required: true
-    },
+    
     date: {
         type: Date,
         default: Date.now
@@ -27,18 +24,17 @@ const purchase = new mongoose.Schema({
         },
         exp_date: {
             type: Date,
-            default: Date.now
-        },
-        recevied_date:{
-             type : Date , 
-             default : function() {
+            default : function() {
                 const currentDate = new Date()
                 const defaultDate = new Date(currentDate.setDate(currentDate.getDate() + 7));
                 return defaultDate
              }
-
         },
-        recevied_quantity :{
+        received_date:{
+             type : Date , 
+             required : true 
+},
+        received_quantity :{
             type : Number , 
             required : true,
             default: 0
@@ -64,9 +60,9 @@ const purchase = new mongoose.Schema({
         type: String,
         required: true
     },
-    recevied :{
+    received :{
         type : Boolean,
-        required :true 
+        required :false 
     }
 
 })
